@@ -1,6 +1,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
+from PyQt6.QtWidgets import QDialog
 
-class VectorialesWindow(QtWidgets.QWidget):
+class VectorialesWindow(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
         self.setupUi(self)
