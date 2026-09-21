@@ -2,6 +2,7 @@ from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton
 )
 
+from ui.vectoriales_window import VectorialesWindow
 from ui.basica_window import CalculadoraMatrices
 from ui.avanzada_window import CalculadoraMatricesAvanzada
 
@@ -33,6 +34,9 @@ class MainWindow(QWidget):
 
         botones_layout.addWidget(btn_basica)
         botones_layout.addWidget(btn_avanzada)
+        btn_vectoriales = QPushButton("Vectoriales")
+        btn_vectoriales.clicked.connect(self.abrir_vectoriales)
+        botones_layout.addWidget(btn_vectoriales)
 
         layout_principal.addLayout(botones_layout)
 
@@ -47,3 +51,8 @@ class MainWindow(QWidget):
         self.ventana_avanzada = CalculadoraMatricesAvanzada(self)
         self.hide()
         self.ventana_avanzada.show()
+
+    def abrir_vectoriales(self):
+        self.ventana_vectoriales = VectorialesWindow(self)
+        self.hide()
+        self.ventana_vectoriales.show()

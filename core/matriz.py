@@ -17,16 +17,13 @@ class Matriz:
         return len(self.datos[0]) if self.datos else 0
 
     def obtener_valor(self, fila, columna):
-        """Obtiene el valor en una posición específica"""
+        """Obtiene un valor en una posición específica"""
         return self.datos[fila][columna]
 
     def establecer_valor(self, fila, columna, valor):
-        """Cambia el valor en una posición específica"""
+        """Cambia un valor en una posición específica"""
         self.datos[fila][columna] = valor
 
     def __str__(self):
         """Representación en texto de la matriz"""
         return "\n".join(["\t".join(map(str, fila)) for fila in self.datos])
-
-
-

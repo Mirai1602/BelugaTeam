@@ -1,6 +1,10 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
-class CalculadoraVectores(object):
+class VectorialesWindow(QtWidgets.QWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setupUi(self)
+
     def setupUi(self, CalcWindow):
         CalcWindow.setObjectName("CalcWindow")
         CalcWindow.resize(700, 500)

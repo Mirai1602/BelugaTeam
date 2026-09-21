@@ -2,7 +2,7 @@ from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, QPushButton
 )
 
-from BelugaTeam.BelugaCalc.ui.vectoriales import VectorialesWindow
+from BelugaTeam.BelugaCalc.ui.vectoriales_window import CalculadoraVectores, VectorialesWindow
 from ui.basica_window import CalculadoraMatrices
 from ui.avanzada_window import CalculadoraMatricesAvanzada
 
@@ -53,6 +53,6 @@ class MainWindow(QWidget):
         self.ventana_avanzada.show()
 
     def abrir_vectoriales(self):
-        self.ventana_vectoriales = VectorialesWindow(self)
+        self.ventana_vectoriales = CalculadoraVectores(self)
         self.hide()
         self.ventana_vectoriales.show()
