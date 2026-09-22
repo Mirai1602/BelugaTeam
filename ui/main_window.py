@@ -31,44 +31,31 @@ class MainWindow(FluentWindow):
         self.init_navigation()
 
     def init_navigation(self):
-        # Qallariy (Inicio)
+        # Pantalla de Inicio
         self.addSubInterface(
             self.home_window,
             icon=FIF.HOME,
             text="Inicio"
         )
 
-        # Módulos (Iconokuna allinchasqa)
+        # Módulos de Cálculo con íconos estándar seguros
         self.addSubInterface(
             self.ventana_basica,
-            icon=FIF.APPLICATION,
+            icon=FIF.APPLICATION,   # Módulo básico / Aritmética
             text="Básica"
         )
         self.addSubInterface(
             self.ventana_avanzada,
-            icon=FIF.EDIT,
+            icon=FIF.EDIT,          # Módulo avanzado / Álgebra
             text="Avanzada"
         )
         self.addSubInterface(
             self.ventana_vectoriales,
-            icon=FIF.CODE,
+            icon=FIF.CODE,          # Vectores y estructuras
             text="Vectores"
         )
         self.addSubInterface(
             self.ventana_ecuaciones,
-            icon=FIF.DOCUMENT,
+            icon=FIF.DOCUMENT,      # Ecuaciones y matrices
             text="Ecuaciones Matriciales"
         )
-
-    def navegar_a(self, clave):
-        mapa_modulos = {
-            "home": self.home_window,
-            "basica": self.ventana_basica,
-            "avanzada": self.ventana_avanzada,
-            "vectores": self.ventana_vectoriales,
-            "ecuaciones": self.ventana_ecuaciones
-        }
-        
-        target = mapa_modulos.get(clave)
-        if target:
-            self.switchTo(target)
