@@ -11,6 +11,7 @@ Estructura:
 - `core/matriz.py`: clase Matriz original.
 - `core/utils.py`: funciones auxiliares.
 - `controllers/main_controller.py`: controlador anterior, conservado por compatibilidad.
+- assets: Contiene pantallas gráficas de UI
 
 Para ejecutar:
 
