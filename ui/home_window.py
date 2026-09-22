@@ -3,11 +3,10 @@ from PyQt6.QtWidgets import (
     QWidget, QVBoxLayout, QHBoxLayout, QLabel, 
     QPushButton, QStackedWidget, QGraphicsDropShadowEffect
 )
-from PyQt6.QtCore import Qt, pyqtSignal
+from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap, QColor, QPainter, QBrush, QPen, QLinearGradient
 
 
-# --- AVATAR CON CÍRCULO Y BURBUJAS DE ALTA RESOLUCIÓN ---
 class HighResAvatar(QWidget):
     def __init__(self, ruta_imagen, parent=None):
         super().__init__(parent)
@@ -19,7 +18,6 @@ class HighResAvatar(QWidget):
         painter.setRenderHint(QPainter.RenderHint.Antialiasing, True)
         painter.setRenderHint(QPainter.RenderHint.SmoothPixmapTransform, True)
 
-        # Círculo de fondo
         gradiente_circulo = QLinearGradient(20, 20, 200, 200)
         gradiente_circulo.setColorAt(0.0, QColor("#45E3FF"))
         gradiente_circulo.setColorAt(1.0, QColor("#86F3FF"))
@@ -28,7 +26,6 @@ class HighResAvatar(QWidget):
         painter.setBrush(QBrush(gradiente_circulo))
         painter.drawEllipse(15, 15, 190, 190)
 
-        # Burbujas
         burbuja_brush = QBrush(QColor(255, 255, 255, 110))
         burbuja_pen = QPen(QColor(255, 255, 255, 210), 1.5)
         painter.setBrush(burbuja_brush)
@@ -41,7 +38,6 @@ class HighResAvatar(QWidget):
         for bx, by, br in burbujas:
             painter.drawEllipse(bx, by, br * 2, br * 2)
 
-        # Renderizado de la beluguita
         if not self.pixmap.isNull():
             pix_escalado = self.pixmap.scaled(
                 150, 150, 
@@ -53,13 +49,10 @@ class HighResAvatar(QWidget):
             painter.drawPixmap(x, y, pix_escalado)
 
 
-# --- CLASE PRINCIPAL ---
 class HomeWindow(QWidget):
-    modulo_seleccionado = pyqtSignal(str)
-
-    def __init__(self, ventana_principal=None):
-        super().__init__(ventana_principal)
-        self.ventana_principal = ventana_principal
+    def __init__(self, main_window=None):
+        super().__init__(parent=main_window)
+        self.main_window = main_window
         self.init_ui()
 
     def init_ui(self):
@@ -77,9 +70,7 @@ class HomeWindow(QWidget):
             QWidget#PantallaBienvenida {
                 background: qlineargradient(
                     x1:0, y1:0, x2:1, y2:1,
-                    stop:0 #A3F1FC,
-                    stop:0.5 #C3F5FF,
-                    stop:1 #E1FAFF
+                    stop:0 #A3F1FC, stop:0.5 #C3F5FF, stop:1 #E1FAFF
                 );
             }
         """)
@@ -109,14 +100,14 @@ class HomeWindow(QWidget):
         lbl_subtitulo = QLabel("DESKTOP · PRINCIPAL")
         lbl_subtitulo.setStyleSheet("""
             color: #7A9FB8; font-size: 12px; font-weight: 700; 
-            font-family: 'Segoe UI Variable Text', 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI Variable Text', sans-serif;
             letter-spacing: 1.5px; background: transparent;
         """)
 
         lbl_titulo = QLabel("Calculadora")
         lbl_titulo.setStyleSheet("""
             color: #0E324E; font-size: 38px; font-weight: 800; 
-            font-family: 'Segoe UI Variable Display', 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI Variable Display', sans-serif;
             background: transparent;
         """)
 
@@ -125,13 +116,10 @@ class HomeWindow(QWidget):
         btn_inicio.setFixedSize(180, 50)
         btn_inicio.setStyleSheet("""
             QPushButton {
-                background-color: #38D8F7;
-                color: #052438;
-                font-size: 17px;
-                font-weight: 800;
-                font-family: 'Segoe UI Variable Small', 'Segoe UI', sans-serif;
-                border-radius: 25px;
-                border: none;
+                background-color: #38D8F7; color: #052438;
+                font-size: 17px; font-weight: 800;
+                font-family: 'Segoe UI Variable Small', sans-serif;
+                border-radius: 25px; border: none;
             }
             QPushButton:hover { background-color: #21CCEC; }
             QPushButton:pressed { background-color: #17B1CD; }
@@ -155,9 +143,7 @@ class HomeWindow(QWidget):
             QWidget#PantallaEleccion {
                 background: qlineargradient(
                     x1:0, y1:0, x2:1, y2:1,
-                    stop:0 #A3F1FC,
-                    stop:0.5 #C3F5FF,
-                    stop:1 #E1FAFF
+                    stop:0 #A3F1FC, stop:0.5 #C3F5FF, stop:1 #E1FAFF
                 );
             }
         """)
@@ -179,7 +165,6 @@ class HomeWindow(QWidget):
         card_layout = QVBoxLayout(card)
         card_layout.setContentsMargins(35, 25, 35, 30)
 
-        # Header superior
         header_layout = QHBoxLayout()
         btn_volver = QPushButton("← Volver")
         btn_volver.setCursor(Qt.CursorShape.PointingHandCursor)
@@ -213,30 +198,9 @@ class HomeWindow(QWidget):
         grid_opciones.setSpacing(16)
 
         opciones = [
-            {
-                "titulo": "Básica",
-                "tag": "+ − ×",
-                "desc": "Aritmética esencial, porcentajes y operaciones elementales.",
-                "clave": "basica",
-                "bg": "#F8FAFC",
-                "border": "#E2E8F0"
-            },
-            {
-                "titulo": "Avanzada",
-                "tag": "f (x)",
-                "desc": "Determinantes, matrices inversas y sistemas lineales.",
-                "clave": "avanzada",
-                "bg": "#F8FAFC",
-                "border": "#E2E8F0"
-            },
-            {
-                "titulo": "Vectores",
-                "tag": "[ → ]",
-                "desc": "Producto escalar, producto cruz, magnitudes y ángulos.",
-                "clave": "vectores",
-                "bg": "#F8FAFC",
-                "border": "#E2E8F0"
-            }
+            {"titulo": "Básica", "tag": "+ − ×", "desc": "Aritmética esencial, porcentajes y operaciones elementales.", "clave": "basica"},
+            {"titulo": "Avanzada", "tag": "f (x)", "desc": "Determinantes, matrices inversas y sistemas lineales.", "clave": "avanzada"},
+            {"titulo": "Vectores", "tag": "[ → ]", "desc": "Producto escalar, producto cruz, magnitudes y ángulos.", "clave": "vectores"}
         ]
 
         for item in opciones:
@@ -249,6 +213,7 @@ class HomeWindow(QWidget):
             layout_card_item.setAlignment(Qt.AlignmentFlag.AlignTop)
 
             lbl_tag = QLabel(item["tag"])
+            lbl_tag.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
             lbl_tag.setStyleSheet("""
                 color: #1B889B; background-color: #E0F7FA;
                 font-size: 11px; font-weight: 800;
@@ -258,6 +223,7 @@ class HomeWindow(QWidget):
             lbl_tag.setFixedHeight(24)
 
             lbl_card_title = QLabel(item["titulo"])
+            lbl_card_title.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
             lbl_card_title.setStyleSheet("""
                 color: #0E324E; font-size: 18px; font-weight: 800;
                 font-family: 'Segoe UI Variable Display', sans-serif;
@@ -265,6 +231,7 @@ class HomeWindow(QWidget):
             """)
 
             lbl_card_desc = QLabel(item["desc"])
+            lbl_card_desc.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
             lbl_card_desc.setWordWrap(True)
             lbl_card_desc.setStyleSheet("""
                 color: #64748B; font-size: 12px; font-weight: 500;
@@ -273,6 +240,7 @@ class HomeWindow(QWidget):
             """)
 
             lbl_action = QLabel("Abrir módulo →")
+            lbl_action.setAttribute(Qt.WidgetAttribute.WA_TransparentForMouseEvents)
             lbl_action.setStyleSheet("""
                 color: #38D8F7; font-size: 12px; font-weight: 700;
                 font-family: 'Segoe UI Variable Text', sans-serif;
@@ -287,22 +255,22 @@ class HomeWindow(QWidget):
             layout_card_item.addStretch()
             layout_card_item.addWidget(lbl_action)
 
-            btn_card.setStyleSheet(f"""
-                QPushButton {{
-                    background-color: {item['bg']};
-                    border: 1.5px solid {item['border']};
+            btn_card.setStyleSheet("""
+                QPushButton {
+                    background-color: #F8FAFC;
+                    border: 1.5px solid #E2E8F0;
                     border-radius: 18px;
                     text-align: left;
-                }}
-                QPushButton:hover {{
+                }
+                QPushButton:hover {
                     background-color: #FFFFFF;
                     border-color: #38D8F7;
-                }}
+                }
             """)
 
-            # Conexión para saltar a la pantalla correspondiente en MainWindow
-            clave_actual = item["clave"]
-            btn_card.clicked.connect(lambda _, c=clave_actual: self.abrir_modulo(c))
+            # Llamada directa al método de cambio de ventana
+            clave_destino = item["clave"]
+            btn_card.clicked.connect(lambda _, c=clave_destino: self.ir_a_modulo(c))
             grid_opciones.addWidget(btn_card)
 
         card_layout.addLayout(header_layout)
@@ -315,8 +283,6 @@ class HomeWindow(QWidget):
         layout_principal.addWidget(card)
         return contenedor
 
-    def abrir_modulo(self, clave):
-        if self.ventana_principal and hasattr(self.ventana_principal, 'navegar_a'):
-            self.ventana_principal.navegar_a(clave)
-        else:
-            self.modulo_seleccionado.emit(clave)
+    def ir_a_modulo(self, clave):
+        if self.main_window and hasattr(self.main_window, 'navegar_a'):
+            self.main_window.navegar_a(clave)

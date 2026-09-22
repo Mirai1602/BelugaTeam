@@ -14,14 +14,14 @@ class MainWindow(FluentWindow):
         self.setWindowTitle("BelugaCalc")
         self.resize(1100, 750)
 
-        # Pantallakuna
+        # Instanciar las ventanas pasando 'self' para darles acceso a la barra Fluent
         self.home_window = HomeWindow(self)
         self.ventana_basica = CalculadoraMatrices(self)
         self.ventana_avanzada = CalculadoraMatricesAvanzada(self)
         self.ventana_vectoriales = VectorialesWindow(self)
         self.ventana_ecuaciones = EcuacionesWindow(self)
 
-        # Sutinkuna navegacionpaq
+        # Asignar nombres de objeto únicos
         self.home_window.setObjectName("homeWindow")
         self.ventana_basica.setObjectName("basicaWindow")
         self.ventana_avanzada.setObjectName("avanzadaWindow")
@@ -31,31 +31,42 @@ class MainWindow(FluentWindow):
         self.init_navigation()
 
     def init_navigation(self):
-        # Pantalla de Inicio
         self.addSubInterface(
             self.home_window,
             icon=FIF.HOME,
             text="Inicio"
         )
-
-        # Módulos de Cálculo con íconos estándar seguros
         self.addSubInterface(
             self.ventana_basica,
-            icon=FIF.APPLICATION,   # Módulo básico / Aritmética
+            icon=FIF.APPLICATION,
             text="Básica"
         )
         self.addSubInterface(
             self.ventana_avanzada,
-            icon=FIF.EDIT,          # Módulo avanzado / Álgebra
+            icon=FIF.EDIT,
             text="Avanzada"
         )
         self.addSubInterface(
             self.ventana_vectoriales,
-            icon=FIF.CODE,          # Vectores y estructuras
+            icon=FIF.CODE,
             text="Vectores"
         )
         self.addSubInterface(
             self.ventana_ecuaciones,
-            icon=FIF.DOCUMENT,      # Ecuaciones y matrices
+            icon=FIF.DOCUMENT,
             text="Ecuaciones Matriciales"
         )
+
+    def navegar_a(self, clave):
+        mapa_modulos = {
+            "basica": self.ventana_basica,
+            "avanzada": self.ventana_avanzada,
+            "vectores": self.ventana_vectoriales,
+            "ecuaciones": self.ventana_ecuaciones,
+            "home": self.home_window
+        }
+        
+        target = mapa_modulos.get(clave)
+        if target:
+            # Forzar la selección directa del widget en la interfaz Fluent
+            self.switchTo(target)
