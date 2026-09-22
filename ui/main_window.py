@@ -3,6 +3,7 @@ from PyQt6.QtWidgets import (
 )
 
 from ui.vectoriales_window import VectorialesWindow
+from ui.ecuaciones_window import EcuacionesWindow
 from ui.basica_window import CalculadoraMatrices
 from ui.avanzada_window import CalculadoraMatricesAvanzada
 
@@ -34,9 +35,13 @@ class MainWindow(QWidget):
 
         botones_layout.addWidget(btn_basica)
         botones_layout.addWidget(btn_avanzada)
-        btn_vectoriales = QPushButton("Vectoriales")
+        btn_vectoriales = QPushButton("Vectores")
         btn_vectoriales.clicked.connect(self.abrir_vectoriales)
         botones_layout.addWidget(btn_vectoriales)
+
+        btn_ecuaciones = QPushButton("Ecuaciones matriciales")
+        btn_ecuaciones.clicked.connect(self.abrir_ecuaciones)
+        botones_layout.addWidget(btn_ecuaciones)
 
         layout_principal.addLayout(botones_layout)
 
@@ -56,3 +61,8 @@ class MainWindow(QWidget):
         self.ventana_vectoriales = VectorialesWindow(self)
         self.hide()
         self.ventana_vectoriales.show()
+
+    def abrir_ecuaciones(self):
+        self.ventana_ecuaciones = EcuacionesWindow(self)
+        self.hide()
+        self.ventana_ecuaciones.show()
