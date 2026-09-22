@@ -37,7 +37,7 @@ pip install "PyQt6-Fluent-Widgets"
 ```
 
 ### Estructura del proyecto
-
+```text
 BelugaTeam/
 ├── assets/                     # Recursos visuales e imágenes
 │   └── BelugaK1.png            # Logotipo / Icono de la aplicación
@@ -60,7 +60,7 @@ BelugaTeam/
 ├── main.py                     # Punto de entrada principal
 ├── requirements.txt            # Archivo de dependencias
 └── README.md                   # Documentación del proyecto
-
+```
 
 Para ejecutar:
 
