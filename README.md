@@ -34,6 +34,9 @@ Ejecuta los siguientes comandos en tu terminal para instalar las librerías nece
 ```bash
 pip install PyQt6
 pip install "PyQt6-Fluent-Widgets"
+```
+
+### Estructura del proyecto
 
 BelugaTeam/
 ├── assets/                     # Recursos visuales e imágenes
