@@ -5,6 +5,7 @@ from ui.basica_window import CalculadoraMatrices
 from ui.avanzada_window import CalculadoraMatricesAvanzada
 from ui.vectoriales_window import VectorialesWindow
 from ui.ecuaciones_window import EcuacionesWindow
+from ui.inversa_window import InversaWindow
 
 
 class MainWindow(FluentWindow):
@@ -20,6 +21,7 @@ class MainWindow(FluentWindow):
         self.ventana_avanzada = CalculadoraMatricesAvanzada(self)
         self.ventana_vectoriales = VectorialesWindow(self)
         self.ventana_ecuaciones = EcuacionesWindow(self)
+        self.ventana_inversa = InversaWindow(self)
 
         # Sutinkuna navegacionpaq
         self.home_window.setObjectName("homeWindow")
@@ -27,6 +29,7 @@ class MainWindow(FluentWindow):
         self.ventana_avanzada.setObjectName("avanzadaWindow")
         self.ventana_vectoriales.setObjectName("vectorialesWindow")
         self.ventana_ecuaciones.setObjectName("ecuacionesWindow")
+        self.ventana_inversa.setObjectName("inversaWindow")
 
         self.init_navigation()
 
@@ -59,6 +62,11 @@ class MainWindow(FluentWindow):
             icon=FIF.DOCUMENT,
             text="Ecuaciones Matriciales"
         )
+        self.addSubInterface(
+            self.ventana_inversa,
+            icon=FIF.DOCUMENT,
+            text="Matrices Inversas"
+        )
 
     def navegar_a(self, clave):
         mapa_modulos = {
@@ -66,7 +74,8 @@ class MainWindow(FluentWindow):
             "basica": self.ventana_basica,
             "avanzada": self.ventana_avanzada,
             "vectores": self.ventana_vectoriales,
-            "ecuaciones": self.ventana_ecuaciones
+            "ecuaciones": self.ventana_ecuaciones,
+            "inversa": self.ventana_inversa
         }
         
         target = mapa_modulos.get(clave)
