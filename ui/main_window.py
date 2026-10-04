@@ -64,7 +64,7 @@ class MainWindow(FluentWindow):
         )
         self.addSubInterface(
             self.ventana_inversa,
-            icon=FIF.DOCUMENT,
+            icon=FIF.BOOK_SHELF,
             text="Matrices Inversas"
         )
 

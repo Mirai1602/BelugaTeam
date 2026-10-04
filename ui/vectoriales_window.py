@@ -87,9 +87,8 @@ class VectorialesWindow(QDialog):
     def generar_vectores(self):
         while self.vectores_layout.count():
             item = self.vectores_layout.takeAt(0)
-            widget = item.widget()
-            if widget:
-                widget.deleteLater()
+            if item.widget():
+                item.widget().deleteLater()
 
         self.tablas_vectores.clear()
         dimension = self.spin_dimension.value()
@@ -117,6 +116,7 @@ class VectorialesWindow(QDialog):
         layout_objetivo.addWidget(self.tabla_objetivo)
         self.vectores_layout.addWidget(grupo_objetivo)
         self.vectores_layout.addStretch()
+
         self.lbl_resultado.setText("Sin resultados")
         self.txt_bitacora.clear()
 
@@ -135,36 +135,54 @@ class VectorialesWindow(QDialog):
 
             if operacion in ("Suma", "Resta"):
                 if len(vectores) < 2:
-                    raise ValueError("Se necesitan al menos dos vectores.")
-                resultado = vectores[0]
-                pasos = []
-                for vector in vectores[1:]:
-                    resultado = VectorModel.suma(resultado, vector) if operacion == "Suma" else VectorModel.resta(resultado, vector)
-                simbolo = "+" if operacion == "Suma" else "-"
-                texto = VectorModel.formato_vector(resultado)
-                pasos.append(f"Se realizó la operación componente por componente usando el símbolo {simbolo}.")
+                    raise ValueError("Se necesitan al menos dos vectores para esta operación.")
+                
+                vector_acumulado = vectores[0]
+                bitacora_total = []
+
+                for idx, siguiente_vector in enumerate(vectores[1:], start=2):
+                    if operacion == "Suma":
+                        res = VectorModel.suma(vector_acumulado, siguiente_vector)
+                    else:
+                        res = VectorModel.resta(vector_acumulado, siguiente_vector)
+                    
+                    vector_acumulado = res["resultado"]
+                    bitacora_total.append(f"--- PASO {idx-1}: Operación con v{idx} ---")
+                    bitacora_total.append(res["pasos"])
+                    bitacora_total.append("\n" + "="*40 + "\n")
+
+                texto_resultado = f"Resultado final ({operacion}): {VectorModel.formato_vector(vector_acumulado)}"
+                texto_bitacora = "\n".join(bitacora_total)
 
             elif operacion == "Multiplicación por escalar":
+                if not vectores:
+                    raise ValueError("Debe existir al menos un vector.")
+                
                 escalar = VectorModel.a_fraction(self.txt_escalar.text())
-                resultado = VectorModel.escalar(vectores[0], escalar)
-                texto = VectorModel.formato_vector(resultado)
-                pasos = [f"Cada componente del primer vector se multiplicó por {VectorModel.valor(escalar)}."]
+                res = VectorModel.escalar(vectores[0], escalar)
+                
+                texto_resultado = f"Resultado final: {VectorModel.formato_vector(res['resultado'])}"
+                texto_bitacora = res["pasos"]
 
-            else:
+            else:  # Combinación lineal
                 objetivo = self.leer_vector(self.tabla_objetivo)
                 respuesta = VectorModel.combinacion_lineal(vectores, objetivo)
-                texto = respuesta["clasificacion"]
+                
+                texto_resultado = respuesta["clasificacion"]
                 if isinstance(respuesta["coeficientes"], list):
-                    texto += "\nCoeficientes: " + VectorModel.formato_vector(respuesta["coeficientes"])
-                pasos = [respuesta["pasos"]]
+                    texto_resultado += "\nCoeficientes: " + VectorModel.formato_vector(respuesta["coeficientes"])
+                
+                texto_bitacora = respuesta["pasos"]
 
-            self.lbl_resultado.setText(texto)
-            self.txt_bitacora.setText("\n".join(pasos))
+            self.lbl_resultado.setText(texto_resultado)
+            self.txt_bitacora.setPlainText(texto_bitacora)
+
         except Exception as error:
             QMessageBox.warning(self, "Error", str(error))
 
     def limpiar(self):
-        for tabla in self.tablas_vectores + [getattr(self, "tabla_objetivo", None)]:
+        tablas = self.tablas_vectores + ([self.tabla_objetivo] if hasattr(self, "tabla_objetivo") else [])
+        for tabla in tablas:
             if tabla:
                 for fila in range(tabla.rowCount()):
                     for columna in range(tabla.columnCount()):

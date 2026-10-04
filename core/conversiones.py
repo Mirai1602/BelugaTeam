@@ -132,3 +132,70 @@ class Conversiones:
     @staticmethod
     def hexadecimal_a_decimal_con_procedimiento(numero):
         return Conversiones._base_a_decimal(numero, 16)
+    @staticmethod
+    def arabigo_a_romano(numero):
+        """Convierte un entero arábigo de 1 a 3999 a numeración romana."""
+        n = Conversiones._validar_entero(numero)
+        if not 1 <= n <= 3999:
+            raise ValueError("Para la conversión tradicional, el número arábigo debe estar entre 1 y 3999.")
+
+        valores = [
+            (1000, "M"), (900, "CM"), (500, "D"), (400, "CD"),
+            (100, "C"), (90, "XC"), (50, "L"), (40, "XL"),
+            (10, "X"), (9, "IX"), (5, "V"), (4, "IV"), (1, "I")
+        ]
+
+        restante = n
+        partes = []
+        pasos = [f"Conversión de {n} (arábigo) a romano", "",
+                 "Se utilizan los valores romanos de mayor a menor.", ""]
+
+        for valor, simbolo in valores:
+            cantidad = restante // valor
+            if cantidad:
+                for _ in range(cantidad):
+                    partes.append(simbolo)
+                    restante -= valor
+                    pasos.append(f"{valor} → {simbolo}; restante = {restante}")
+
+        resultado = "".join(partes)
+        pasos.append(f"\nResultado: {resultado}")
+        return resultado, "\n".join(pasos)
+
+    @staticmethod
+    def romano_a_arabigo(romano):
+        """Convierte una numeración romana canónica de 1 a 3999 a entero arábigo."""
+        texto = str(romano).strip().upper()
+        if not texto:
+            raise ValueError("El número romano no puede estar vacío.")
+
+        valores = {"I": 1, "V": 5, "X": 10, "L": 50, "C": 100, "D": 500, "M": 1000}
+        if any(c not in valores for c in texto):
+            raise ValueError("El número romano contiene símbolos no válidos.")
+
+        total = 0
+        pasos = [f"Conversión de {texto} (romano) a arábigo", "",
+                 "Se recorren los símbolos de izquierda a derecha.",
+                 "Si un símbolo menor aparece antes de uno mayor, se resta; de lo contrario, se suma.", ""]
+
+        i = 0
+        while i < len(texto):
+            actual = valores[texto[i]]
+            if i + 1 < len(texto) and actual < valores[texto[i + 1]]:
+                siguiente = valores[texto[i + 1]]
+                total += siguiente - actual
+                pasos.append(f"{texto[i]}({actual}) antes de {texto[i+1]}({siguiente}) → {siguiente} - {actual} = {siguiente - actual}; acumulado = {total}")
+                i += 2
+            else:
+                total += actual
+                pasos.append(f"{texto[i]}({actual}) → +{actual}; acumulado = {total}")
+                i += 1
+
+        # Validación canónica: evita aceptar formas como IIII, IC o VX.
+        canonico, _ = Conversiones.arabigo_a_romano(total)
+        if canonico != texto:
+            raise ValueError(f"Número romano no válido en notación tradicional: {texto}.")
+
+        pasos.append(f"\nResultado: {total}")
+        return str(total), "\n".join(pasos)
+
