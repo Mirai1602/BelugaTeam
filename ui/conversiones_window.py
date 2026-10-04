@@ -48,7 +48,9 @@ class ConversionesWindow(QDialog):
             "Decimal → Octal",
             "Octal → Decimal",
             "Decimal → Hexadecimal",
-            "Hexadecimal → Decimal"
+            "Hexadecimal → Decimal",
+            "Arábigo → Romano",
+            "Romano → Arábigo"
         ])
         fila_tipo.addWidget(self.combo_conversion)
         entrada_layout.addLayout(fila_tipo)
@@ -109,6 +111,10 @@ class ConversionesWindow(QDialog):
                 resultado, procedimiento = Conversiones.decimal_a_hexadecimal_con_procedimiento(valor)
             elif opcion == "Hexadecimal → Decimal":
                 resultado, procedimiento = Conversiones.hexadecimal_a_decimal_con_procedimiento(valor)
+            elif opcion == "Arábigo → Romano":
+                resultado, procedimiento = Conversiones.arabigo_a_romano(valor)
+            elif opcion == "Romano → Arábigo":
+                resultado, procedimiento = Conversiones.romano_a_arabigo(valor)
             else:
                 return
 

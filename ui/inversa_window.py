@@ -71,7 +71,6 @@ class InversaWindow(QWidget):
         layout_matriz = QVBoxLayout(contenedor)
 
         grupo = QGroupBox("Matriz A")
-        grupo.setMinimumHeight(1000)
         grupo_layout = QVBoxLayout(grupo)
         self.tabla_matriz = QTableWidget()
         self.tabla_matriz.setAlternatingRowColors(True)
@@ -90,13 +89,12 @@ class InversaWindow(QWidget):
 
         principal.addWidget(StrongBodyLabel("Resultado:"))
         self.tabla_resultado = QTableWidget()
-        self.tabla_resultado.setMaximumHeight(150)
+        self.tabla_resultado.setMaximumHeight(180)
         self.tabla_resultado.setAlternatingRowColors(True)
         principal.addWidget(self.tabla_resultado)
 
         principal.addWidget(StrongBodyLabel("Validaciones y procedimiento:"))
         self.txt_bitacora = QTextEdit()
-        self.txt_bitacora.setMinimumHeight(300)
         self.txt_bitacora.setReadOnly(True)
         principal.addWidget(self.txt_bitacora, 2)
 
